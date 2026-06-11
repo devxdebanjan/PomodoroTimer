@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relaxing Pomodoro Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Dark Mode Toggle -->
+        <button id="dark-mode-btn" class="icon-btn" aria-label="Toggle Dark Mode">
+            <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <svg id="sun-icon" class="d-none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+
+        <!-- Settings Modal Toggle -->
+        <button id="settings-btn" class="icon-btn" aria-label="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+
+        <!-- Stats display -->
+        <div class="stats-container">
+            <span class="stats-label">Today's Focus:</span>
+            <span id="total-focus-display" class="stats-value">0m</span>
+        </div>
+
+        <!-- Main Timer Card -->
+        <div class="timer-card">
+            <div class="modes">
+                <button class="mode-btn active" data-mode="focus">Focus</button>
+                <button class="mode-btn" data-mode="shortBreak">Short Break</button>
+                <button class="mode-btn" data-mode="longBreak">Long Break</button>
+            </div>
+
+            <div class="timer-display">
+                <span id="time-left">25:00</span>
+            </div>
+
+            <div class="controls">
+                <button id="start-btn" class="primary-btn">Start</button>
+                <button id="reset-btn" class="secondary-btn">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="close-settings-btn" class="icon-btn">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Timer Durations (minutes)</h3>
+                    <div class="setting-group">
+                        <label for="focus-duration">Focus Time</label>
+                        <input type="number" id="focus-duration" min="1" max="120" value="25">
+                    </div>
+                    <div class="setting-group">
+                        <label for="short-break-duration">Short Break</label>
+                        <input type="number" id="short-break-duration" min="1" max="60" value="5">
+                    </div>
+                    <div class="setting-group">
+                        <label for="long-break-duration">Long Break</label>
+                        <input type="number" id="long-break-duration" min="1" max="120" value="15">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Audio Options</h3>
+                    <div class="setting-group">
+                        <label for="alarm-sound">Alarm Sound</label>
+                        <select id="alarm-sound">
+                            <option value="chime">Gentle Chime</option>
+                            <option value="bell">Soft Bell</option>
+                            <option value="beep">Digital Beep</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <button id="test-audio-btn" class="secondary-btn small-btn">Test Sound</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="primary-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
