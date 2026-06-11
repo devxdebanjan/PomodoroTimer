@@ -21,9 +21,6 @@ Because the app is built using vanilla HTML, CSS, and JavaScript, you do not nee
 
 ## Using the GitHub Hosted Version
 
-If this project is hosted on GitHub, you can access and run it directly online using GitHub Pages.
-
-### How to access it
 Here click this: [Pomodoro Timer](https://devxdebanjan.github.io/PomodoroTimer/)
 
 ### How it behaves when hosted
