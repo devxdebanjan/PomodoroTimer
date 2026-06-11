@@ -24,7 +24,7 @@ Because the app is built using vanilla HTML, CSS, and JavaScript, you do not nee
 If this project is hosted on GitHub, you can access and run it directly online using GitHub Pages.
 
 ### How to access it
-Here click this: [Pomodoro Timer](https://devxdebanjan.github.io/pomodorotimer/)
+Here click this: [Pomodoro Timer](https://devxdebanjan.github.io/PomodoroTimer/)
 
 ### How it behaves when hosted
 - No Installation Needed: You can run and use the timer straight from the link on any device (computer, tablet, or mobile phone).
