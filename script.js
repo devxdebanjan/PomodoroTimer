@@ -21,12 +21,20 @@ const longBreakDurationInput = document.getElementById('long-break-duration');
 const alarmSoundSelect = document.getElementById('alarm-sound');
 const testAudioBtn = document.getElementById('test-audio-btn');
 
+// Notes Elements
+const noteInput = document.getElementById('note-input');
+const addNoteBtn = document.getElementById('add-note-btn');
+const notesList = document.getElementById('notes-list');
+const notesCount = document.getElementById('notes-count');
+const notesEmpty = document.getElementById('notes-empty');
+
 // State
 let timer;
 let isRunning = false;
 let currentMode = 'focus'; // focus, shortBreak, longBreak
 let timeLeft = 25 * 60; // in seconds
 let sessionFocusSeconds = 0; // accumulated focus time in current session
+let notes = []; // Array of { id, text, checked }
 
 // Settings
 let durations = {
@@ -43,6 +51,7 @@ function init() {
     loadSettings();
     loadDailyStats();
     loadDarkMode();
+    loadNotes();
     switchMode(currentMode);
     setupEventListeners();
     checkMidnightReset();
@@ -73,6 +82,12 @@ function setupEventListeners() {
         if(e.target === settingsModal) {
             closeSettings();
         }
+    });
+
+    // Notes
+    addNoteBtn.addEventListener('click', addNote);
+    noteInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') addNote();
     });
 }
 
@@ -341,6 +356,106 @@ function playOscillator(type, frequency, startTime, volume, duration) {
 
     osc.start(startTime);
     osc.stop(startTime + duration);
+}
+
+// ---- Notes Logic ----
+function loadNotes() {
+    const saved = localStorage.getItem('pomodoroNotes');
+    if (saved) {
+        try {
+            notes = JSON.parse(saved);
+        } catch (e) {
+            notes = [];
+        }
+    }
+    renderNotes();
+}
+
+function saveNotes() {
+    localStorage.setItem('pomodoroNotes', JSON.stringify(notes));
+}
+
+function addNote() {
+    const text = noteInput.value.trim();
+    if (!text) return;
+
+    const note = {
+        id: Date.now().toString(),
+        text: text,
+        checked: false
+    };
+
+    notes.push(note);
+    saveNotes();
+    renderNotes();
+    noteInput.value = '';
+    noteInput.focus();
+}
+
+function toggleNote(id) {
+    const note = notes.find(n => n.id === id);
+    if (note) {
+        note.checked = !note.checked;
+        saveNotes();
+        renderNotes();
+    }
+}
+
+function deleteNote(id) {
+    const li = document.querySelector(`[data-note-id="${id}"]`);
+    if (li) {
+        li.classList.add('removing');
+        setTimeout(() => {
+            notes = notes.filter(n => n.id !== id);
+            saveNotes();
+            renderNotes();
+        }, 250);
+    }
+}
+
+function renderNotes() {
+    notesList.innerHTML = '';
+
+    const uncheckedCount = notes.filter(n => !n.checked).length;
+    notesCount.textContent = uncheckedCount;
+
+    // Bump animation on count badge
+    notesCount.classList.add('bump');
+    setTimeout(() => notesCount.classList.remove('bump'), 200);
+
+    // Toggle empty state
+    if (notes.length === 0) {
+        notesEmpty.classList.remove('d-none');
+    } else {
+        notesEmpty.classList.add('d-none');
+    }
+
+    notes.forEach(note => {
+        const li = document.createElement('li');
+        li.className = `note-item${note.checked ? ' checked' : ''}`;
+        li.setAttribute('data-note-id', note.id);
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'note-checkbox';
+        checkbox.checked = note.checked;
+        checkbox.addEventListener('change', () => toggleNote(note.id));
+
+        const span = document.createElement('span');
+        span.className = 'note-text';
+        span.textContent = note.text;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'note-delete-btn';
+        deleteBtn.setAttribute('aria-label', 'Delete note');
+        deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+        deleteBtn.addEventListener('click', () => deleteNote(note.id));
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        notesList.appendChild(li);
+    });
 }
 
 // Start app

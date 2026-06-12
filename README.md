@@ -10,7 +10,8 @@ This is a clean, lightweight Pomodoro timer built to help you stay focused. It r
 - Progress Tracker: Keeps track of your daily focus time in hours and minutes.
 - Midnight Auto-Reset: The daily tracker automatically resets at midnight so you start fresh every morning.
 - Dark Mode: Toggle between light and dark themes. The app remembers your preference.
-- Local Storage Support: Your settings, daily focus time, and dark mode preferences are saved in your browser, so everything stays intact if you close or refresh the page.
+- Integrated Notes: A side-by-side notes/to-do list panel where you can add tasks, check them off as completed, and delete them.
+- Local Storage Support: Your settings, daily focus time, notes, and dark mode preferences are saved in your browser, so everything stays intact if you close or refresh the page.
 
 ## Running Locally
 
